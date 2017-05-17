@@ -14,12 +14,13 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Green Recorder.  If not, see <http://www.gnu.org/licenses/>.
+from math import pi
 import gi
 
 gi.require_version('Gtk','3.0')
 gi.require_version('AppIndicator3', '0.1')
 
-from gi.repository import Gtk, Gdk, GLib, AppIndicator3 as appindicator
+from gi.repository import Gtk, Gdk, GLib, GObject, AppIndicator3 as appindicator
 from pydbus import SessionBus
 import subprocess, signal, threading, datetime, urllib
 
@@ -167,6 +168,92 @@ def stoprecording(self):
     window.show()
     subprocess.Popen([RecorderCommand], shell=True)
 
+
+class AreaDragger(Gtk.DrawingArea):
+    selected_signal = GObject.Signal('selected')
+
+    def __init__(self):
+        Gtk.DrawingArea.__init__(self)
+        self.coords = (100, 100, 500, 500)
+        self._dragging = None
+
+        self.props.hexpand = True
+        self.props.vexpand = True
+
+        self.add_events(Gdk.EventMask.BUTTON1_MOTION_MASK
+                        | Gdk.EventMask.BUTTON_PRESS_MASK
+                        | Gdk.EventMask.BUTTON_RELEASE_MASK)
+
+    def _dist_from(self, event, x, y):
+        a = event.x - x
+        b = event.y - y
+        return a*a + b*b
+
+    def _min_dist(self, event, points):
+        mn = 1<<31
+        value = None
+        for point, v in points.items():
+            d = self._dist_from(event, *point)
+            if d < mn:
+                mn = d
+                value = v
+        if mn > 32*32:
+            return None
+        return value
+
+    def _get_drag_points(self):
+        x1, y1, x2, y2 = self.coords
+        ym = (y1+y2)/2
+        xm = (x1+x2)/2
+        return {
+            (x1, ym): (1, 0, 0, 0),
+            (x2, ym): (0, 0, 1, 0),
+            (xm, y1): (0, 1, 0, 0),
+            (xm, y2): (0, 0, 0, 1),
+
+            (x1, y1): (1, 1, 0, 0),
+            (x1, y2): (1, 0, 0, 1),
+            (x2, y1): (0, 1, 1, 0),
+            (x2, y2): (0, 0, 1, 1),
+        }
+
+    def do_event(self, event):
+        if event.type == Gdk.EventType.BUTTON_PRESS:
+            self._dragging = self._min_dist(event, self._get_drag_points())
+        if event.type in (Gdk.EventType.BUTTON_RELEASE,
+                          Gdk.EventType.MOTION_NOTIFY):
+            pass
+        else:
+            return
+
+        x1, y1, x2, y2 = self.coords
+        ym = (y1+y2)/2
+        xm = (x1+x2)/2
+
+        if self._dragging is not None:
+            zeros = self.coords
+            ones = (event.x, event.y, event.x, event.y)
+            zipped = zip(zeros, ones)
+            self.coords = [v[k] for k, v in zip(self._dragging, zipped)]
+        else:
+            self.selected_signal.emit()
+        self.queue_draw()
+
+
+    def do_draw(self, cr):
+        x1, y1, x2, y2 = self.coords
+        cr.set_source_rgba(1.0, 1.0, 0.0, 0.5)
+        cr.rectangle(x1, y1, x2-x1, y2-y1)
+        cr.fill()
+
+        for x, y in self._get_drag_points().keys():
+            cr.set_source_rgba(0.0, 0.0, 0.0, 1.0)
+            cr.arc(x, y, 12, 0.0, 2.0 * pi)
+            cr.fill()
+            cr.set_source_rgba(1.0, 1.0, 1.0, 1.0)
+            cr.arc(x, y, 10, 0.0, 2.0 * pi)
+            cr.fill()
+
 # Import the glade file and its widgets.
 builder = Gtk.Builder()
 builder.add_from_file("/usr/share/green-recorder/ui.glade")
@@ -199,6 +286,8 @@ expander = builder.get_object("expandertext")
 # TODO: support internationalization using gettext.
 window.set_title("Green Recorder")
 areachooser.set_name('AreaChooser')
+area_dragger = AreaDragger()
+areachooser.add(area_dragger)
 window.connect("delete-event", Gtk.main_quit,)
 folderchooser.set_uri("file://" + VideosFolder)
 filenameentry.set_placeholder_text("File Name (Will be overwritten)..")
@@ -293,24 +382,23 @@ class Handler:
         
     def selectarea(self, GtkButton):
         areachooser.set_title("Area Chooser")
-        areachooser.show()
+        areachooser.show_all()
+        areachooser.fullscreen()
         
 
-    def areasettings(self, GtkButton):
-        output = subprocess.check_output(["xwininfo -name \"Area Chooser\" | grep -e Width -e Height -e Absolute"], shell=True)[:-1]
-        global r
-        r = [int(l.split(':')[1]) for l in output.split('\n')]
+    def areasettings(self, widget):
+        WindowXAxis, WindowYAxis, WindowWidth, WindowHeight  = widget.coords
         global WindowXAxis, WindowYAxis, WindowWidth, WindowHeight
-        WindowXAxis = r[0]
-        WindowYAxis = r[1] + 28 # -28 becaues of a small bug in xwininfo which makes it takes the frame if the option -name is used with it.
-        WindowWidth = r[2]
-        WindowHeight = r[3] - 28
+        WindowWidth -= WindowXAxis
+        WindowHeight -= WindowYAxis
         areachooser.hide()
         notifications.Notify('GreenRecorder', 0, 'green-recorder', "Green Recorder", "Your area position has been saved!", [], {}, 3000)
         
     
 # Connect the handler to the glade file's objects.
-builder.connect_signals(Handler())
+h = Handler()
+builder.connect_signals(h)
+area_dragger.selected_signal.connect(h.areasettings)
 
 # Load CSS for Area Chooser.
 style_provider = Gtk.CssProvider()
