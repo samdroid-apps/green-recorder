@@ -32,15 +32,15 @@ import os  # noqa
 import ConfigParser  # noqa
 
 # Configuration
-confDir = os.path.join(GLib.get_user_config_dir(), 'green-recorder/')
-confFile = os.path.join(confDir + "config.ini")
+conf_dir = os.path.join(GLib.get_user_config_dir(), 'green-recorder/')
+conf_file = os.path.join(conf_dir + "config.ini")
 config = ConfigParser.ConfigParser()
 
-if not os.path.exists(confDir):
-    os.makedirs(confDir)
+if not os.path.exists(conf_dir):
+    os.makedirs(conf_dir)
 
-if os.path.isfile(confFile):
-    config.read(confFile)
+if os.path.isfile(conf_file):
+    config.read(conf_file)
 else:
     config.add_section('Options')
     config.set('Options', 'frames', '30')
@@ -53,8 +53,8 @@ else:
     config.set('Options', 'audiocheck', 'True')
     config.set('Options', 'mousecheck', 'True')
     config.set('Options', 'followmousecheck', 'False')
-    with open(confFile, 'wb') as confFile2:
-        config.write(confFile2)
+    with open(conf_file, 'wb') as conf_file2:
+        config.write(conf_file2)
 
 # Localization.
 locale.setlocale(locale.LC_ALL, '')
@@ -586,61 +586,38 @@ class Handler:
         areachooser.hide()
         sendnotification("Your area position has been saved!", 3)
 
+    def _change_config(self, name, value):
+        config.set('Options', name, value)
+        global conf_file
+        with open(conf_file, 'w+') as newconf_file:
+            config.write(newconf_file)
+
     def frameschanged(self, GtkSpinButton):
-        config.set('Options', 'frames', int(float(framespref.get_value())))
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('frames', int(float(framespref.get_value())))
 
     def delaychanged(self, GtkSpinButton):
-        config.set('Options', 'delay', int(float(delaypref.get_value())))
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('delay', int(float(delaypref.get_value())))
 
     def folderchosen(self, GtkFileChooserButton):
-        config.set('Options', 'folder', urllib.unquote(
-            folderchooser2.get_uri()))
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('folder', urllib.unquote(folderchooser2.get_uri()))
 
     def commandchanged(self, GtkEntry):
-        config.set('Options', 'command', commandentry2.get_text())
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('command', commandentry2.get_text())
 
     def videoswitchchanged(self, GtkSwitch, s):
-        config.set('Options', 'videocheck', videoswitch.get_active())
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('videocheck', videoswitch.get_active())
 
     def audioswitchchanged(self, GtkSwitch, s):
-        config.set('Options', 'audiocheck', audioswitch.get_active())
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('audiocheck', audioswitch.get_active())
 
     def mouseswitchchanged(self, GtkSwitch, s):
-        config.set('Options', 'mousecheck', mouseswitch.get_active())
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('mousecheck', mouseswitch.get_active())
 
     def followmouseswitchchanged(self, GtkSwitch, s):
-        config.set('Options', 'followmousecheck',
-                   followmouseswitch.get_active())
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('followmousecheck', followmouseswitch.get_active())
 
     def filenamechanged(self, GtkEntry):
-        config.set('Options', 'filename', preffilename.get_text())
-        global confFile
-        with open(confFile, 'w+') as newconfFile:
-            config.write(newconfFile)
+        self._change_config('filename', preffilename.get_text())
 
 # Connect the handler to the glade file's objects.
 builder.connect_signals(Handler())
@@ -654,8 +631,10 @@ css = """
 }
 """
 style_provider.load_from_data(css)
-Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(
-), style_provider,     Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+Gtk.StyleContext.add_provider_for_screen(
+    Gdk.Screen.get_default(),
+    style_provider,
+    Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
 # The End of all things.
 if __name__ == "__main__":
