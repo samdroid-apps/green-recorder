@@ -423,31 +423,6 @@ videocheck.set_label(_("Record Video"))
 audiocheck.set_label(_("Record Audio"))
 mousecheck.set_label(_("Show Mouse"))
 followmousecheck.set_label(_("Follow Mouse"))
-aboutdialog.set_transient_for(window)
-aboutdialog.set_program_name(_("Green Recorder"))
-aboutdialog.set_version("3.0")
-aboutdialog.set_copyright("© 2017 FOSS Project")
-aboutdialog.set_wrap_license(True)
-aboutdialog.set_license(
-    "Green Recorder is free software: you can redistribute it and/or modify "
-    "it under the terms of the GNU General Public License as published by "
-    "the Free Software Foundation, either version 3 of the License, or "
-    "(at your option) any later version.\n\n"
-    "Green Recorder is distributed in the hope that it will be useful, but "
-    "WITHOUT ANY WARRANTY; without even the implied warranty of "
-    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
-    "See the GNU General Public License for more details. You should have "
-    "received a copy of the GNU General Public License along with Green "
-    "Recorder. If not, see <http://www.gnu.org/licenses/>.")
-aboutdialog.set_comments(
-    _("A simple screen recorder for Linux desktop. Supports Wayland & Xorg."))
-aboutdialog.set_authors([
-    'M.Hanny Sabbagh <mhsabbagh@outlook.com>',
-    'Sam Parkinson <sam@sam.today>',
-    'Patreon Supporters: Ahmad Gharib, Medium.'])
-aboutdialog.set_artists(['Mustapha Assabar'])
-aboutdialog.set_website("https://foss-project.com")
-aboutdialog.set_logo_icon_name("green-recorder")
 preferenceswindow.set_icon_name("green-recorder")
 windowgrabbutton.set_label(_("Select a Window"))
 areagrabbutton.set_label(_("Select an Area"))
