@@ -90,7 +90,7 @@ class Configuration():
 config = Configuration()
 
 
-def url_to_filepath(url):
+def url_to_filepath(url: str):
     '''
     Takes a url (or filepath) and returns a file path
     '''
@@ -112,21 +112,13 @@ loop = GLib.MainLoop()
 bus = SessionBus()
 
 # Get the current name of the Videos folder
-RecorderDisplay = subprocess.check_output(
-    "xdpyinfo | grep 'dimensions:'|awk '{print $2}'", shell=True)[:-1]
 DISPLAY = os.environ["DISPLAY"]
 
-DisplayServer = os.environ.get("XDG_SESSION_TYPE", "xorg")
-
-print("You are recording on: " + str(DisplayServer))
-
-if "wayland" in DisplayServer:
-    DisplayServer = "gnomewayland"
-    global GNOMEScreencast
-    GNOMEScreencast = bus.get(
-        'org.gnome.Shell.Screencast', '/org/gnome/Shell/Screencast')
+DISPLAY_SERVER = os.environ.get("XDG_SESSION_TYPE", "xorg")
+if "wayland" in DISPLAY_SERVER:
+    DISPLAY_SERVER = "gnomewayland"
 else:
-    DisplayServer = "xorg"
+    DISPLAY_SERVER = "xorg"
 
 
 def is_running_mate():
@@ -187,6 +179,11 @@ class XorgRecorder(Recorder):
 
 
 class GnomeRecorder(Recorder):
+
+    def __init__(self):
+        self._screencast = bus.get(
+            'org.gnome.Shell.Screencast', '/org/gnome/Shell/Screencast')
+
     def start(self, area: AreaType, desired_output: str,
               format=None, mouse=False, frame_rate=30, **kwargs):
         if format == 'webm':
@@ -207,16 +204,16 @@ class GnomeRecorder(Recorder):
             'draw-cursor': GLib.Variant('b', mouse),
             'pipeline': GLib.Variant('s', pipeline)}
         if area is None:
-            GNOMEScreencast.Screencast(desired_output, options)
+            self._screencast.Screencast(desired_output, options)
         else:
             x, y, w, h = area
-            GNOMEScreencast.ScreencastArea(
+            self._screencast.ScreencastArea(
                 x, y, w, h,
                 desired_output, options)
         self._outfile = desired_output
 
     def stop(self) -> str:
-        GNOMEScreencast.StopScreencast()
+        self._screencast.StopScreencast()
         return self._outfile
 
 
@@ -361,7 +358,7 @@ class AppWindow():
         formatchooser = self._builder.get_object("comboboxtext1")
 
         # Disable unavailable functions under Wayland.
-        if "wayland" in DisplayServer:
+        if "wayland" in DISPLAY_SERVER:
             self._windowgrabbutton.set_sensitive(False)
             self._areagrabbutton.set_sensitive(False)
             self._followmousecheck.set_sensitive(False)
@@ -429,11 +426,10 @@ class AppWindow():
         else:
             filename = self._filenameentry.get_text()
         extension = self._formatchooser.get_active_id()
-        RecorderFullPathName = urllib.parse.unquote('{}/{}'.format(
+        basename = url_to_filepath(os.path.join(
             self._folderchooser.get_uri(),
             filename))
-        self._desired_output = RecorderFullPathName.replace("file://", "")
-        self._mixed_file_output = f'{self._desired_output}.{extension}'
+        self._mixed_file_output = f'{basename}.{extension}'
 
         delay = str(self._delayvalue.get_value_as_int())
         subprocess.call(["sleep", delay])
@@ -445,9 +441,9 @@ class AppWindow():
                 'mouse': self._mousecheck.get_active(),
                 'follow_mouse': self._followmousecheck.get_active(),
                 'frame_rate': self._framesvalue.get_value_as_int()}
-            if "xorg" in DisplayServer:
+            if "xorg" in DISPLAY_SERVER:
                 self._video_recorder = XorgRecorder()
-            elif "gnomewayland" in DisplayServer:
+            elif "gnomewayland" in DISPLAY_SERVER:
                 self._video_recorder = GnomeRecorder()
             else:
                 send_notification('Your display server is not supported!')
@@ -455,10 +451,10 @@ class AppWindow():
                 return
 
             self._video_recorder.start(
-                area, f'{self._desired_output}.video.{extension}', **options)
+                area, f'{basename}.video.{extension}', **options)
 
         if self._audiocheck.get_active():
-            self._audio_recorder_file = f'{self._desired_output}.audio.{extension}'
+            self._audio_recorder_file = f'{basename}.audio.{extension}'
             cmd = ['ffmpeg', '-f', 'pulse',
                    '-i', self._audiosource.get_active_id(),
                    '-strict', '-2',
@@ -488,7 +484,7 @@ class AppWindow():
         subprocess.call(["sleep", "1"])
 
         if len(stream_files) == 1:
-            os.rename(stream_files[0], self._desired_output)
+            os.rename(stream_files[0], self._mixed_file_output)
         else:
             cmd = ['ffmpeg']
             for f in stream_files:
