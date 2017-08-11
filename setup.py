@@ -6,7 +6,7 @@ from os.path import splitext, split
 
 data_files = [ ("share/green-recorder", ["ui/ui.glade"]),
                     ("share/pixmaps", ["data/green-recorder.png"]),
-                     ("share/applications", ["data/green-recorder.desktop"]) ] 
+                     ("share/applications", ["data/green-recorder.desktop"]) ]
 
 po_files = glob("po/*.po")
 for po_file in po_files:
@@ -21,7 +21,7 @@ data_files.extend(locales)
 setup(name = "green-recorder",
       version = "3.0.4",
       description = "Record your desktop easily using a simple GUI",
-      author = "FOSS Project", 
+      author = "FOSS Project",
       author_email = "mhsabbagh@outlook.com",
       url = "https://github.com/foss-project/green-recorder/",
       license='GPLv3',
