@@ -1,7 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# FOSS Project <https://foss-project.com>, 2017.
+# Copyright FOSS Project <https://foss-project.com>, 2017.
+# Copyright Sam Parkinson <sam@sam.today>, 2017.
+#
 # Green Recorder is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -65,11 +67,11 @@ class Configuration():
             self._cp.add_section('Options')
             self.save()
 
-    def __setitem__(self, name, value):
+    def __setitem__(self, name: str, value: T.Union[str, bool, int]):
         self._cp.set('Options', name, str(value))
         self.save()
 
-    def __getitem__(self, name):
+    def __getitem__(self, name: str):
         default = self.DEFAULTS[name]
         if not self._cp.has_option('Options', name):
             return default
@@ -92,7 +94,7 @@ def url_to_filepath(url):
     '''
     Takes a url (or filepath) and returns a file path
     '''
-    res = urlparse(url)
+    res = urllib.parse.urlparse(url)
     assert (not res.scheme) or (res.scheme == 'file')
     return res.path
 
@@ -116,7 +118,7 @@ DISPLAY = os.environ["DISPLAY"]
 
 DisplayServer = os.environ.get("XDG_SESSION_TYPE", "xorg")
 
-print "You are recording on: " + str(DisplayServer)
+print("You are recording on: " + str(DisplayServer))
 
 if "wayland" in DisplayServer:
     DisplayServer = "gnomewayland"
@@ -131,7 +133,7 @@ def is_running_mate():
     return not subprocess.call("ps -cat | grep mate-panel", shell=True)
 
 
-def send_notification(text, time=5):
+def send_notification(text: str, time: int = 5):
     notifications = bus.get('.Notifications')
     notifications.Notify('GreenRecorder', 0, 'green-recorder',
                          "Green Recorder", text, [], {}, time * 1000)
@@ -237,8 +239,8 @@ class Application(Gtk.Application):
         delayprefadjustment.set_value(config['delay'])
         framesprefadjustment.set_value(config['frames'])
         FolderPath = config['folder']
-        self._folderchooser.set_uri(urllib.unquote(FolderPath))
-        folderchooser2.set_uri(urllib.unquote(FolderPath))
+        self._folderchooser.set_uri(urllib.parse.unquote(FolderPath))
+        folderchooser2.set_uri(urllib.parse.unquote(FolderPath))
         self._commandentry.set_text(config['command'])
         commandentry2.set_text(config['command'])
         videoswitch.set_state(config['videocheck'])
@@ -270,7 +272,7 @@ class Application(Gtk.Application):
         combo.append("default", _("Default PulseAudio Input Source"))
         names_output = subprocess.check_output(
             "pacmd list-sources | grep -e device.description", shell=True)
-        names = names_output.split("\n")[:-1]
+        names = names_output.decode().split("\n")[:-1]
 
         for i, name in enumerate(names):
             name = name.replace("\t\tdevice.description = ", "") \
@@ -465,7 +467,7 @@ class Application(Gtk.Application):
             filename = str(datetime.datetime.now())
         else:
             filename = self._filenameentry.get_text()
-        RecorderFullPathName = urllib.unquote('{}/{}.{}'.format(
+        RecorderFullPathName = urllib.parse.unquote('{}/{}.{}'.format(
             self._folderchooser.get_uri(),
             filename,
             self._formatchooser.get_active_id()))
@@ -483,7 +485,7 @@ class Application(Gtk.Application):
             self._window.show()
 
     def stop_recording(self):
-        subprocess.call(["sleep", "1"])  # Wait ffmpeg.
+        subprocess.call(["sleep", "1"])  # Wait ffmpeg
 
         self._indicator.set_status(AppIndicator3.IndicatorStatus.PASSIVE)
         self._window.show()
@@ -498,7 +500,7 @@ class Application(Gtk.Application):
             try:
                 GNOMEScreencast.StopScreencast()
                 AudioProcess.terminate()
-            except:
+            except:  # noqa
                 # FIXME: why is this here?
                 pass  # I know.
 
@@ -540,7 +542,7 @@ class Application(Gtk.Application):
     def _set_area_from_command(self, command):
         output = subprocess.check_output(
             [command + '| grep -e Width -e Height -e Absolute'],
-            shell=True)[:-1]
+            shell=True).decode()[:-1]
 
         self._areaaxis = [int(l.split(':')[1]) for l in output.split('\n')]
 
@@ -559,7 +561,7 @@ class Application(Gtk.Application):
         self._preferenceswindow.hide()
 
     def handle_playbuttonclicked(self, GtkButton):
-        subprocess.call(["xdg-open", urllib.unquote(RecorderAbsPathName)])
+        subprocess.call(["xdg-open", urllib.parse.unquote(RecorderAbsPathName)])
 
     def handle_areasettings(self, GtkButton):
         self._set_area_from_command('xwininfo -name "Area Chooser"')
@@ -572,7 +574,7 @@ class Application(Gtk.Application):
         config['delay'] = int(spin_button.get_value())
 
     def handle_folderchosen(self, chooser):
-        config['folder'] = urllib.unquote(chooser.get_uri())
+        config['folder'] = urllib.parse.unquote(chooser.get_uri())
 
     def handle_commandchanged(self, entry):
         config['command'] = entry.get_text()
@@ -595,7 +597,7 @@ class Application(Gtk.Application):
 
 # Load CSS for Area Chooser.
 style_provider = Gtk.CssProvider()
-css = '''
+css = b'''
 #AreaChooser {
     background-color: rgba(255, 255, 255, 0);
     border: 1px solid red;

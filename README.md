@@ -45,7 +45,7 @@ Make sure you have enabled the multiverse and universe repositories before tryin
 
 ### Debian
 
-You can grab the Debian packages directly from the PPA itself and install it on any Debian distribution. You mainly need the "green-recorder" package and "python-pydbus". Other dependancies (like ffmpeg) are probably in Debian repositories: http://ppa.launchpad.net/fossproject/ppa/ubuntu/
+You can grab the Debian packages directly from the PPA itself and install it on any Debian distribution. You mainly need the "green-recorder" package and "python3-pydbus". Other dependancies (like ffmpeg) are probably in Debian repositories: http://ppa.launchpad.net/fossproject/ppa/ubuntu/
 
 ### Fedora 24/25/26/Rawhide
 
@@ -76,7 +76,7 @@ Run the following commands as root:
     cd /etc/yum.repos.d/
     wget http://download.opensuse.org/repositories/home:mhsabbagh/CentOS_7/home:mhsabbagh.repo
     yum install green-recorder
-     
+
 ### Arch Linux
 
 You can install Green recorder using your [AUR helper](https://wiki.archlinux.org/index.php/AUR_helpers):
@@ -85,16 +85,16 @@ You can install Green recorder using your [AUR helper](https://wiki.archlinux.or
 
 ### Other Distributions
 
-The program requires the pydbus python module, install it first:
+The program requires the pydbus python3 module, install it first:
 
-    sudo pip install pydbus
-    
-The source code is available to download via: [https://github.com/green-project/green-recorder/archive/master.zip](https://github.com/green-project/green-recorder/archive/master.zip). You can simply download it and install the dependencies on your distribution (gir1.2-appindicator3, gawk, python-gobject, python-urllib3, x11-utils, ffmpeg, pydbus, pulseaudio, xdg-open (or xdg-utils), python-configparser, imagemagick). And then run: 
+    sudo pip3 install pydbus
 
-    sudo python setup.py install
+The source code is available to download via: [https://github.com/green-project/green-recorder/archive/master.zip](https://github.com/green-project/green-recorder/archive/master.zip). You can simply download it and install the dependencies on your distribution (gir1.2-appindicator3, gawk, python3-gobject, python3-urllib3, x11-utils, ffmpeg, pydbus, pulseaudio, xdg-open (or xdg-utils), python3-configparser, imagemagick). And then run:
 
-Make sure you are running it with Python 2. It doesn't work currently with Python 3.
-    
+    sudo python3 setup.py install
+
+Make sure you are running it with Python 3.   Believe it or not, in the 10 or so years of development; Python 3 has advanced considerable compared to Python 2!
+
 ## Contact
 
 The program is released under GPL 3. For contact: mhsabbagh[at]outlook.com.
