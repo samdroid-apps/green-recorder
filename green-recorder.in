@@ -1,7 +1,18 @@
 #!/usr/bin/python3
 
-from gi.repository import Gio
-import greenrecorder
+import os
+
+# This is a dodgy hack
+# AppIndicator3 doesn't seem to work under Wayland, but it works
+# find under xWayland
+os.environ['GDK_BACKEND'] = 'x11'
+
+import gi  # noqa
+gi.require_version('Gtk', '3.0')
+gi.require_version('AppIndicator3', '0.1')
+from gi.repository import Gio  # noqa
+
+import greenrecorder  # noqa
 
 resource = Gio.resource_load('@RESOURCE_PATH@')
 Gio.Resource._register(resource)  # noqa

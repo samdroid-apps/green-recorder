@@ -30,16 +30,9 @@ import configparser
 import typing as T
 
 from pydbus import SessionBus
-import gi
+from gi.repository import Gtk, Gdk, GLib, AppIndicator3, Gio
 
-# This is a dodgy hack
-# AppIndicator3 doesn't seem to work under Wayland, but it works
-# find under xWayland
-os.environ['GDK_BACKEND'] = 'x11'
-
-gi.require_version('Gtk', '3.0')
-gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, Gdk, GLib, AppIndicator3, Gio # noqa
+from . import screenrecorder
 
 
 class Configuration():
@@ -116,9 +109,6 @@ gettext.install("green-recorder", "/usr/share/locale")
 loop = GLib.MainLoop()
 bus = SessionBus()
 
-# Get the current name of the Videos folder
-DISPLAY = os.environ["DISPLAY"]
-
 DISPLAY_SERVER = os.environ.get("XDG_SESSION_TYPE", "xorg")
 if "wayland" in DISPLAY_SERVER:
     DISPLAY_SERVER = "gnomewayland"
@@ -134,93 +124,6 @@ def send_notification(text: str, time: int = 5):
     notifications = bus.get('.Notifications')
     notifications.Notify('GreenRecorder', 0, 'green-recorder',
                          "Green Recorder", text, [], {}, time * 1000)
-
-
-
-#                  X,     Y,     Width, Height
-AreaType = T.Tuple[float, float, float, float]
-
-class Recorder():
-    def start(self, area: AreaType, desired_output: str, **kwargs):
-        raise NotImplementedError()
-
-    def stop(self) -> str:
-        '''
-        Stops the recording and returns a path to the video file
-        '''
-        raise NotImplementedError()
-
-
-class XorgRecorder(Recorder):
-    def start(self, area: AreaType, desired_output: str,
-              follow_mouse=False, mouse=False, frame_rate=30, **kwargs):
-        if self._areaaxis is not None:
-            x, y, w, h = self._areaaxis
-            size = '{}x{}'.format(w, h)
-            display = '{}+{},{}'.format(DISPLAY, x, y)
-
-        command = ["ffmpeg", "-video_size", size]
-
-        if mouse:
-            command.append("-draw_mouse")
-            command.append("1")
-
-        if follow_mouse:
-            command.append("-follow_mouse")
-            command.append("centered")
-
-        command.extend([
-            "-framerate", frame_rate,
-            "-f", "x11grab", "-i", display,
-            "-q", 1, desired_output,
-            "-y"])
-
-        self._process = subprocess.Popen(command)
-        self._outfile = desired_output
-
-    def stop(self) -> str:
-        RecorderProcess.terminate()
-        return self._outfile
-
-
-class GnomeRecorder(Recorder):
-
-    def __init__(self):
-        self._screencast = bus.get(
-            'org.gnome.Shell.Screencast', '/org/gnome/Shell/Screencast')
-
-    def start(self, area: AreaType, desired_output: str,
-              format=None, mouse=False, frame_rate=30, **kwargs):
-        if format == 'webm':
-            pipeline = '''
-                vp8enc min_quantizer=10
-                        max_quantizer=50
-                        cq_level=13
-                        cpu-used=5
-                        deadline=1000000
-                        threads=%T
-                ! queue
-                ! webmmux'''
-        else:
-            assert False
-
-        options = {
-            'framerate': GLib.Variant('i', frame_rate),
-            'draw-cursor': GLib.Variant('b', mouse),
-            'pipeline': GLib.Variant('s', pipeline)}
-        if area is None:
-            self._screencast.Screencast(desired_output, options)
-        else:
-            x, y, w, h = area
-            self._screencast.ScreencastArea(
-                x, y, w, h,
-                desired_output, options)
-        self._outfile = desired_output
-
-    def stop(self) -> str:
-        self._screencast.StopScreencast()
-        return self._outfile
-
 
 
 class AppWindow():
@@ -439,9 +342,9 @@ class AppWindow():
                 'follow_mouse': self._followmousecheck.get_active(),
                 'frame_rate': self._framesvalue.get_value_as_int()}
             if "xorg" in DISPLAY_SERVER:
-                self._video_recorder = XorgRecorder()
+                self._video_recorder = screenrecorder.XorgRecorder()
             elif "gnomewayland" in DISPLAY_SERVER:
-                self._video_recorder = GnomeRecorder()
+                self._video_recorder = screenrecorder.GnomeRecorder()
             else:
                 send_notification('Your display server is not supported!')
                 self._window.show()
@@ -455,7 +358,7 @@ class AppWindow():
             cmd = ['ffmpeg', '-f', 'pulse',
                    '-i', self._audiosource.get_active_id(),
                    '-strict', '-2',
-                    self._audio_recorder_file,
+                   self._audio_recorder_file,
                    '-y']
             self._audio_recorder = subprocess.Popen(cmd)
 
