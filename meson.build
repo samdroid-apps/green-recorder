@@ -30,6 +30,12 @@ conf_data.set(
         app_data_dir,
         'today.sam.green-recorder.gresource',
     ]))
+conf_data.set(
+    'LOCALE_DIR',
+    join_paths([
+        get_option('prefix'),
+        get_option('localedir'),
+    ]))
 configure_file(input : 'green-recorder.in',
                output : 'green-recorder',
                install_dir : 'bin',

@@ -28,6 +28,7 @@ import threading
 import subprocess
 import configparser
 import typing as T
+from gettext import gettext as _
 
 from pydbus import SessionBus
 from gi.repository import Gtk, Gdk, GLib, AppIndicator3, Gio
@@ -97,13 +98,6 @@ def url_to_filepath(url: str):
     assert (not res.scheme) or (res.scheme == 'file')
     return res.path
 
-
-# Localization.
-locale.setlocale(locale.LC_ALL, '')
-gettext.bindtextdomain('green-recorder', '/usr/share/locale')
-gettext.textdomain('green-recorder')
-_ = gettext.gettext
-gettext.install("green-recorder", "/usr/share/locale")
 
 # Define a loop and connect to the session bus. This is for Wayland
 # recording under GNOME Shell.
@@ -184,7 +178,6 @@ class AppWindow():
     def __init__(self):
         self._indicator = None
         self._areaaxis = None
-        self._prefs_window = None
 
         # Import the glade file and its widgets.
         builder = Gtk.Builder()
@@ -216,25 +209,6 @@ class AppWindow():
         youcanlabel = builder.get_object("label15")
         self._formatchooser = self._builder.get_object("comboboxtext1")
         self._framesvalue = self._builder.get_object("spinbutton1")
-
-        # Assign the texts to the interface
-        self._window.set_title(_("Green Recorder"))
-        self._areachooser.set_name(_('AreaChooser'))
-        self._window.connect("delete-event", Gtk.main_quit)
-        self._filenameentry.set_placeholder_text(
-            _("File Name (Will be overwritten).."))
-        self._commandentry.set_placeholder_text(_("Enter your command here.."))
-        self._videocheck.set_label(_("Record Video"))
-        self._audiocheck.set_label(_("Record Audio"))
-        self._mousecheck.set_label(_("Show Mouse"))
-        self._followmousecheck.set_label(_("Follow Mouse"))
-        self._windowgrabbutton.set_label(_("Select a Window"))
-        self._areagrabbutton.set_label(_("Select an Area"))
-        frametext.set_label(_("Frames:"))
-        delaytext.set_label(_("Delay:"))
-        commandtext.set_label(_("Run Command After Recording:"))
-        audiosourcelabel.set_label(_("Audio Input Source:"))
-        youcanlabel.set_label(_("If you want, you can:"))
 
         # Get defaults from configuration file.
         delayadjustment.set_value(config['delay'])
@@ -449,9 +423,8 @@ class AppWindow():
         self._areachooser.show()
 
     def handle_preferencesbuttonclicked(self, GtkButton):
-        if self._prefs_window is None:
-            self._prefs_window = PrefsWindow(self._window)
-        self._prefs_window.show()
+        win = PrefsWindow(self._window)
+        win.show()
 
     def handle_playbuttonclicked(self, GtkButton):
         subprocess.call(["xdg-open", self._mixed_file_output])

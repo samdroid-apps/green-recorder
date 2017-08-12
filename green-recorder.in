@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import os
+import gettext
+import locale
 
 # This is a dodgy hack
 # AppIndicator3 doesn't seem to work under Wayland, but it works
@@ -14,7 +16,17 @@ from gi.repository import Gio  # noqa
 
 import greenrecorder  # noqa
 
+# Setup GResource file
 resource = Gio.resource_load('@RESOURCE_PATH@')
 Gio.Resource._register(resource)  # noqa
+
+# Setup l10n
+LOCALE_DIR = '@LOCALE_DIR@'
+print('LOCALE', LOCALE_DIR)
+NAME = 'green-recorder'
+locale.bindtextdomain(NAME, LOCALE_DIR)
+locale.textdomain(NAME)
+gettext.bindtextdomain(NAME, LOCALE_DIR)
+gettext.textdomain(NAME)
 
 greenrecorder.main()

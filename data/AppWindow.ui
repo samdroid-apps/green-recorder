@@ -69,6 +69,7 @@
                 <property name="has_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
+                <property name="placeholder_text" translatable="yes">File Name (Will be overwritten)..</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -116,7 +117,7 @@
               <object class="GtkLabel" id="label15">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="label" translatable="yes">If you want, you can:</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -126,7 +127,7 @@
             </child>
             <child>
               <object class="GtkButton" id="button4">
-                <property name="label" translatable="yes">button</property>
+                <property name="label" translatable="yes">Select a Window</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -140,7 +141,7 @@
             </child>
             <child>
               <object class="GtkButton" id="button5">
-                <property name="label" translatable="yes">button</property>
+                <property name="label" translatable="yes">Select an Area</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -167,7 +168,7 @@
               <object class="GtkLabel" id="audiosourcelabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="label" translatable="yes">Audio Input Source:</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -207,7 +208,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="checkbutton1">
-                    <property name="label" translatable="yes">checkbutton</property>
+                    <property name="label" translatable="yes">Record Video</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -220,7 +221,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkbutton2">
-                    <property name="label" translatable="yes">checkbutton</property>
+                    <property name="label" translatable="yes">Record Audio</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -233,7 +234,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkbutton3">
-                    <property name="label" translatable="yes">checkbutton</property>
+                    <property name="label" translatable="yes">Show Mouse</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -246,7 +247,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkbutton4">
-                    <property name="label" translatable="yes">checkbutton</property>
+                    <property name="label" translatable="yes">Follow Mouse</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -273,7 +274,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="yes">Frames:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -298,7 +299,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="yes">Delay:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -341,7 +342,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="label" translatable="yes">Run Command After Recording:</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -353,6 +354,7 @@
               <object class="GtkEntry" id="entry2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="placeholder_text" translatable="yes">Enter your command here..</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -373,6 +375,7 @@
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="title">Green Recorder</property>
         <property name="has_subtitle">False</property>
         <property name="show_close_button">True</property>
         <child>
@@ -479,6 +482,7 @@ Patreon Supporters: Ahmad Gharib, Medium.</property>
       <object class="GtkHeaderBar" id="headerbar2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="title">Area Chooser</property>
         <property name="has_subtitle">False</property>
         <property name="show_close_button">True</property>
         <child>

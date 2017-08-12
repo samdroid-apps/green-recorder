@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: green-recorder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-12 10:22+1000\n"
+"POT-Creation-Date: 2017-08-12 13:35+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,37 +17,106 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/AppWindow.ui:47 data/AppWindow.ui:96 data/AppWindow.ui:132
-#: data/AppWindow.ui:168 data/AppWindow.ui:204 data/AppWindow.ui:253
-#: data/AppWindow.ui:290 data/AppWindow.ui:331 data/AppWindow.ui:371
-#: data/AppWindow.ui:510 data/AppWindow.ui:561 data/AppWindow.ui:667
-#: data/AppWindow.ui:692 data/AppWindow.ui:735
+#: data/AppWindow.ui:119 data/AppWindow.ui:170 data/AppWindow.ui:276
+#: data/AppWindow.ui:301 data/AppWindow.ui:344
 msgid "label"
 msgstr ""
 
-#: data/AppWindow.ui:303
-msgid "3"
-msgstr ""
-
-#: data/AppWindow.ui:344 data/AppWindow.ui:679
-msgid "30"
-msgstr ""
-
-#: data/AppWindow.ui:520 data/AppWindow.ui:534
+#: data/AppWindow.ui:129 data/AppWindow.ui:143
 msgid "button"
 msgstr ""
 
-#: data/AppWindow.ui:601 data/AppWindow.ui:614 data/AppWindow.ui:627
-#: data/AppWindow.ui:640
+#: data/AppWindow.ui:210 data/AppWindow.ui:223 data/AppWindow.ui:236
+#: data/AppWindow.ui:249
 msgid "checkbutton"
 msgstr ""
 
-#: data/AppWindow.ui:704
+#: data/AppWindow.ui:288
+msgid "30"
+msgstr ""
+
+#: data/AppWindow.ui:313
 msgid "0"
 msgstr ""
 
-#: data/AppWindow.ui:834
+#: data/AppWindow.ui:444
 msgid "© 2017 FOSS Project"
+msgstr ""
+
+#: data/PrefsWindow.ui:18
+msgid "Preferences"
+msgstr ""
+
+#: data/PrefsWindow.ui:34
+msgid "Video"
+msgstr ""
+
+#: data/PrefsWindow.ui:66 greenrecorder/__init__.py:220
+msgid "Record Video"
+msgstr ""
+
+#: data/PrefsWindow.ui:114
+msgid "Record Mouse"
+msgstr ""
+
+#: data/PrefsWindow.ui:140
+msgid "Include the mouse cursor in the video file"
+msgstr ""
+
+#: data/PrefsWindow.ui:180 greenrecorder/__init__.py:223
+msgid "Follow Mouse"
+msgstr ""
+
+#: data/PrefsWindow.ui:205
+msgid "Center the video area on the mouse cursor"
+msgstr ""
+
+#: data/PrefsWindow.ui:245
+msgid "Default Delay"
+msgstr ""
+
+#: data/PrefsWindow.ui:257
+msgid "Delay between clicking record and the recording starting, in seconds"
+msgstr ""
+
+#: data/PrefsWindow.ui:312
+msgid "Default Frames"
+msgstr ""
+
+#: data/PrefsWindow.ui:324
+msgid "FPS of the recording"
+msgstr ""
+
+#: data/PrefsWindow.ui:375
+msgid "Audio"
+msgstr ""
+
+#: data/PrefsWindow.ui:407 greenrecorder/__init__.py:221
+msgid "Record Audio"
+msgstr ""
+
+#: data/PrefsWindow.ui:450
+msgid "Saving"
+msgstr ""
+
+#: data/PrefsWindow.ui:482
+msgid "Default folder"
+msgstr ""
+
+#: data/PrefsWindow.ui:532
+msgid "Default filename"
+msgstr ""
+
+#: data/PrefsWindow.ui:544
+msgid "Leave blank to use time"
+msgstr ""
+
+#: data/PrefsWindow.ui:598
+msgid "Default command"
+msgstr ""
+
+#: data/PrefsWindow.ui:610
+msgid "Run a command after recording"
 msgstr ""
 
 #: data/app-menu.ui:5
@@ -63,123 +132,83 @@ msgid "_Quit"
 msgstr ""
 
 #. Assign the texts to the interface
-#: greenrecorder/__init__.py:282 greenrecorder/__init__.py:581
+#: greenrecorder/__init__.py:214 greenrecorder/__init__.py:461
 msgid "Green Recorder"
 msgstr ""
 
-#: greenrecorder/__init__.py:283
+#: greenrecorder/__init__.py:215
 msgid "AreaChooser"
 msgstr ""
 
-#: greenrecorder/__init__.py:284
-msgid "Green Recorder Preferences"
-msgstr ""
-
-#: greenrecorder/__init__.py:287 greenrecorder/__init__.py:291
+#: greenrecorder/__init__.py:218
 msgid "File Name (Will be overwritten).."
 msgstr ""
 
-#: greenrecorder/__init__.py:288 greenrecorder/__init__.py:289
+#: greenrecorder/__init__.py:219
 msgid "Enter your command here.."
 msgstr ""
 
-#: greenrecorder/__init__.py:292 greenrecorder/__init__.py:307
-msgid "Record Video"
-msgstr ""
-
-#: greenrecorder/__init__.py:293 greenrecorder/__init__.py:308
-msgid "Record Audio"
-msgstr ""
-
-#: greenrecorder/__init__.py:294
+#: greenrecorder/__init__.py:222
 msgid "Show Mouse"
 msgstr ""
 
-#: greenrecorder/__init__.py:295 greenrecorder/__init__.py:310
-msgid "Follow Mouse"
-msgstr ""
-
-#: greenrecorder/__init__.py:297
+#: greenrecorder/__init__.py:224
 msgid "Select a Window"
 msgstr ""
 
-#: greenrecorder/__init__.py:298
+#: greenrecorder/__init__.py:225
 msgid "Select an Area"
 msgstr ""
 
-#: greenrecorder/__init__.py:299
+#: greenrecorder/__init__.py:226
 msgid "Frames:"
 msgstr ""
 
-#: greenrecorder/__init__.py:300
+#: greenrecorder/__init__.py:227
 msgid "Delay:"
 msgstr ""
 
-#: greenrecorder/__init__.py:301
+#: greenrecorder/__init__.py:228
 msgid "Run Command After Recording:"
 msgstr ""
 
-#: greenrecorder/__init__.py:302
-msgid "Default frames:"
-msgstr ""
-
-#: greenrecorder/__init__.py:303
-msgid "Default delay:"
-msgstr ""
-
-#: greenrecorder/__init__.py:304
-msgid "Default folder:"
-msgstr ""
-
-#: greenrecorder/__init__.py:305
-msgid "Default command:"
-msgstr ""
-
-#: greenrecorder/__init__.py:306
+#: greenrecorder/__init__.py:229
 msgid "Audio Input Source:"
 msgstr ""
 
-#: greenrecorder/__init__.py:309
-msgid "Record Mouse"
-msgstr ""
-
-#: greenrecorder/__init__.py:311
-msgid "Default filename:"
-msgstr ""
-
-#: greenrecorder/__init__.py:312
+#: greenrecorder/__init__.py:230
 msgid "If you want, you can:"
 msgstr ""
 
 #. Audio input sources
-#: greenrecorder/__init__.py:349
+#: greenrecorder/__init__.py:258
 msgid "Default PulseAudio Input Source"
 msgstr ""
 
-#: greenrecorder/__init__.py:373
+#: greenrecorder/__init__.py:282
 msgid "MKV (Matroska multimedia container format)"
 msgstr ""
 
-#: greenrecorder/__init__.py:374
+#: greenrecorder/__init__.py:283
 msgid "AVI (Audio Video Interleaved)"
 msgstr ""
 
-#: greenrecorder/__init__.py:375
+#: greenrecorder/__init__.py:284
 msgid "MP4 (MPEG-4 Part 14)"
 msgstr ""
 
-#: greenrecorder/__init__.py:376
+#: greenrecorder/__init__.py:285
 msgid "WMV (Windows Media Video)"
 msgstr ""
 
-#: greenrecorder/__init__.py:377
+#: greenrecorder/__init__.py:286
 msgid "GIF (Graphics Interchange Format)"
 msgstr ""
 
-#: greenrecorder/__init__.py:378
+#: greenrecorder/__init__.py:287
 msgid "NUT (NUT Recording Format)"
 msgstr ""
 
-#: greenrecorder/__init__.py:532
+#: greenrecorder/__init__.py:441
 msgid "Area Chooser"
 msgstr ""
