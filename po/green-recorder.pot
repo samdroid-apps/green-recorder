@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: green-recorder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-12 13:35+1000\n"
+"POT-Creation-Date: 2017-08-12 14:14+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,42 +17,78 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/AppWindow.ui:119 data/AppWindow.ui:170 data/AppWindow.ui:276
-#: data/AppWindow.ui:301 data/AppWindow.ui:344
-msgid "label"
+#: data/AppWindow.ui:73
+msgid "File Name (Will be overwritten).."
 msgstr ""
 
-#: data/AppWindow.ui:129 data/AppWindow.ui:143
-msgid "button"
+#: data/AppWindow.ui:121
+msgid "If you want, you can:"
 msgstr ""
 
-#: data/AppWindow.ui:210 data/AppWindow.ui:223 data/AppWindow.ui:236
-#: data/AppWindow.ui:249
-msgid "checkbutton"
+#: data/AppWindow.ui:131
+msgid "Select a Window"
 msgstr ""
 
-#: data/AppWindow.ui:288
+#: data/AppWindow.ui:145
+msgid "Select an Area"
+msgstr ""
+
+#: data/AppWindow.ui:172
+msgid "Audio Input Source:"
+msgstr ""
+
+#: data/AppWindow.ui:212 data/PrefsWindow.ui:66
+msgid "Record Video"
+msgstr ""
+
+#: data/AppWindow.ui:225 data/PrefsWindow.ui:407
+msgid "Record Audio"
+msgstr ""
+
+#: data/AppWindow.ui:238
+msgid "Show Mouse"
+msgstr ""
+
+#: data/AppWindow.ui:251 data/PrefsWindow.ui:180
+msgid "Follow Mouse"
+msgstr ""
+
+#: data/AppWindow.ui:278
+msgid "Frames:"
+msgstr ""
+
+#: data/AppWindow.ui:290
 msgid "30"
 msgstr ""
 
-#: data/AppWindow.ui:313
+#: data/AppWindow.ui:303
+msgid "Delay:"
+msgstr ""
+
+#: data/AppWindow.ui:315
 msgid "0"
 msgstr ""
 
-#: data/AppWindow.ui:444
-msgid "© 2017 FOSS Project"
+#: data/AppWindow.ui:346
+msgid "Run Command After Recording:"
 msgstr ""
 
-#: data/PrefsWindow.ui:18
+#: data/AppWindow.ui:358
+msgid "Enter your command here.."
+msgstr ""
+
+#: data/AboutWindow.ui:10
+msgid ""
+"© 2017 FOSS Project\n"
+"© 2017 Sam Parkinson"
+msgstr ""
+
+#: data/PrefsWindow.ui:18 data/app-menu.ui:6
 msgid "Preferences"
 msgstr ""
 
 #: data/PrefsWindow.ui:34
 msgid "Video"
-msgstr ""
-
-#: data/PrefsWindow.ui:66 greenrecorder/__init__.py:220
-msgid "Record Video"
 msgstr ""
 
 #: data/PrefsWindow.ui:114
@@ -61,10 +97,6 @@ msgstr ""
 
 #: data/PrefsWindow.ui:140
 msgid "Include the mouse cursor in the video file"
-msgstr ""
-
-#: data/PrefsWindow.ui:180 greenrecorder/__init__.py:223
-msgid "Follow Mouse"
 msgstr ""
 
 #: data/PrefsWindow.ui:205
@@ -91,10 +123,6 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-#: data/PrefsWindow.ui:407 greenrecorder/__init__.py:221
-msgid "Record Audio"
-msgstr ""
-
 #: data/PrefsWindow.ui:450
 msgid "Saving"
 msgstr ""
@@ -119,96 +147,47 @@ msgstr ""
 msgid "Run a command after recording"
 msgstr ""
 
-#: data/app-menu.ui:5
-msgid "_About"
+#: data/app-menu.ui:11
+msgid "About"
 msgstr ""
 
-#: data/app-menu.ui:10
-msgid "_Preferences"
-msgstr ""
-
-#: data/app-menu.ui:14
-msgid "_Quit"
-msgstr ""
-
-#. Assign the texts to the interface
-#: greenrecorder/__init__.py:214 greenrecorder/__init__.py:461
-msgid "Green Recorder"
-msgstr ""
-
-#: greenrecorder/__init__.py:215
-msgid "AreaChooser"
-msgstr ""
-
-#: greenrecorder/__init__.py:218
-msgid "File Name (Will be overwritten).."
-msgstr ""
-
-#: greenrecorder/__init__.py:219
-msgid "Enter your command here.."
-msgstr ""
-
-#: greenrecorder/__init__.py:222
-msgid "Show Mouse"
-msgstr ""
-
-#: greenrecorder/__init__.py:224
-msgid "Select a Window"
-msgstr ""
-
-#: greenrecorder/__init__.py:225
-msgid "Select an Area"
-msgstr ""
-
-#: greenrecorder/__init__.py:226
-msgid "Frames:"
-msgstr ""
-
-#: greenrecorder/__init__.py:227
-msgid "Delay:"
-msgstr ""
-
-#: greenrecorder/__init__.py:228
-msgid "Run Command After Recording:"
-msgstr ""
-
-#: greenrecorder/__init__.py:229
-msgid "Audio Input Source:"
-msgstr ""
-
-#: greenrecorder/__init__.py:230
-msgid "If you want, you can:"
+#: data/app-menu.ui:16
+msgid "Quit"
 msgstr ""
 
 #. Audio input sources
-#: greenrecorder/__init__.py:258
+#: greenrecorder/__init__.py:232
 msgid "Default PulseAudio Input Source"
 msgstr ""
 
-#: greenrecorder/__init__.py:282
+#: greenrecorder/__init__.py:256
 msgid "MKV (Matroska multimedia container format)"
 msgstr ""
 
-#: greenrecorder/__init__.py:283
+#: greenrecorder/__init__.py:257
 msgid "AVI (Audio Video Interleaved)"
 msgstr ""
 
-#: greenrecorder/__init__.py:284
+#: greenrecorder/__init__.py:258
 msgid "MP4 (MPEG-4 Part 14)"
 msgstr ""
 
-#: greenrecorder/__init__.py:285
+#: greenrecorder/__init__.py:259
 msgid "WMV (Windows Media Video)"
 msgstr ""
 
-#: greenrecorder/__init__.py:286
+#: greenrecorder/__init__.py:260
 msgid "GIF (Graphics Interchange Format)"
 msgstr ""
 
-#: greenrecorder/__init__.py:287
+#: greenrecorder/__init__.py:261
 msgid "NUT (NUT Recording Format)"
 msgstr ""
 
-#: greenrecorder/__init__.py:441
+#: greenrecorder/__init__.py:411
 msgid "Area Chooser"
+msgstr ""
+
+#: greenrecorder/__init__.py:427
+msgid "Green Recorder"
 msgstr ""

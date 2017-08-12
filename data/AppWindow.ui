@@ -24,30 +24,31 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkImage" id="image1">
+  <object class="GtkImage" id="image-preferences">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-preferences</property>
   </object>
-  <object class="GtkImage" id="image2">
+  <object class="GtkImage" id="image-about">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-about</property>
   </object>
-  <object class="GtkImage" id="image3">
+  <object class="GtkImage" id="image-media-play">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-media-play</property>
   </object>
-  <object class="GtkImage" id="image4">
+  <object class="GtkImage" id="image-media-record">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-media-record</property>
   </object>
-  <object class="GtkWindow" id="window1">
-    <property name="visible">True</property>
+  <object class="GtkApplicationWindow" id="window1">
+    <!-- Need to give application prop before it is visible so that the
+         app-menu works -->
+    <property name="visible">False</property>
     <property name="can_focus">False</property>
-    <property name="opacity">0.99999999977648257</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="icon">/usr/share/pixmaps/green-recorder.png</property>
@@ -383,7 +384,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="image">image4</property>
+            <property name="image">image-media-record</property>
             <property name="relief">none</property>
             <property name="always_show_image">True</property>
             <signal name="clicked" handler="handle_recordclicked" swapped="no"/>
@@ -394,78 +395,13 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="image">image3</property>
+            <property name="image">image-media-play</property>
             <property name="relief">none</property>
             <property name="always_show_image">True</property>
             <signal name="clicked" handler="handle_playbuttonclicked" swapped="no"/>
           </object>
           <packing>
             <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="button3">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="image">image2</property>
-            <property name="relief">none</property>
-            <property name="always_show_image">True</property>
-            <signal name="clicked" handler="handle_about" swapped="no"/>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="preferencesbutton">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="image">image1</property>
-            <property name="relief">none</property>
-            <property name="always_show_image">True</property>
-            <signal name="clicked" handler="handle_preferencesbuttonclicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-  </object>
-  <object class="GtkAboutDialog" id="aboutdialog">
-    <property name="can_focus">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">window1</property>
-    <property name="program_name">Green Recorder</property>
-    <property name="version">3.0</property>
-    <property name="copyright" translatable="yes">© 2017 FOSS Project</property>
-    <property name="website">https://foss-project.com</property>
-    <property name="authors">M.Hanny Sabbagh &lt;mhsabbagh@outlook.com&gt;
-Sam Parkinson &lt;sam@sam.today&gt;
-Patreon Supporters: Ahmad Gharib, Medium.</property>
-    <property name="artists">Mustapha Assabar</property>
-    <property name="logo_icon_name">green-recorder</property>
-    <property name="license_type">gpl-3-0</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="aboutdialog-vbox1">
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="aboutdialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="homogeneous">True</property>
-            <property name="layout_style">end</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
           </packing>
         </child>
       </object>

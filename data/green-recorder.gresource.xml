@@ -5,6 +5,7 @@
     <!-- <file alias="gtk/help-overlay.ui" preprocess="xml-stripblanks">help-overlay.ui</file> -->
     <!-- <file>application.css</file> -->
     <file preprocess="xml-stripblanks">AppWindow.ui</file>
+    <file preprocess="xml-stripblanks">AboutWindow.ui</file>
     <file preprocess="xml-stripblanks">PrefsWindow.ui</file>
   </gresource>
 </gresources>

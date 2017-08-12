@@ -31,6 +31,7 @@ from pydbus import SessionBus
 from gi.repository import Gtk, Gdk, GLib, AppIndicator3, Gio
 
 from . import screenrecorder
+from . import about
 
 
 class Configuration():
@@ -120,14 +121,12 @@ def send_notification(text: str, time: int = 5):
 
 class PrefsWindow():
 
-    def __init__(self, parent_window):
-        # Import the glade file and its widgets.
+    def __init__(self):
         self._builder = Gtk.Builder()
         self._builder.add_from_resource('/today/sam/green-recorder/PrefsWindow.ui')
         self._builder.connect_signals(self)
 
         self._window = self._builder.get_object('window')
-        self._window.props.attached_to = parent_window
 
         self._builder.get_object('video').props.state = config['videocheck']
         self._builder.get_object('mouse').props.state = config['mousecheck']
@@ -172,7 +171,7 @@ class PrefsWindow():
 
 class AppWindow():
 
-    def __init__(self):
+    def __init__(self, application):
         self._indicator = None
         self._areaaxis = None
 
@@ -200,6 +199,9 @@ class AppWindow():
         self._playbutton = builder.get_object("playbutton")
         self._formatchooser = self._builder.get_object("comboboxtext1")
         self._framesvalue = self._builder.get_object("spinbutton1")
+
+        self._window.props.application = application
+        self._window.show()
 
         # Get defaults from configuration file.
         delayadjustment.set_value(config['delay'])
@@ -390,10 +392,6 @@ class AppWindow():
         if post_command:
             subprocess.Popen([post_command], shell=True)
 
-    def handle_about(self, GtkButton):
-        d = self._builder.get_object('aboutdialog')
-        d.run()
-        d.hide()
 
     def handle_recordclicked(self, GtkButton):
         self.record()
@@ -413,10 +411,6 @@ class AppWindow():
         self._areachooser.set_title(_("Area Chooser"))
         self._areachooser.show()
 
-    def handle_preferencesbuttonclicked(self, GtkButton):
-        win = PrefsWindow(self._window)
-        win.show()
-
     def handle_playbuttonclicked(self, GtkButton):
         subprocess.call(["xdg-open", self._mixed_file_output])
 
@@ -434,13 +428,13 @@ class Application(Gtk.Application):
         GLib.set_prgname('green-recorder')
 
     def do_activate(self):
-        window = AppWindow()
+        window = AppWindow(self)
         window.show()
 
     def _build_app_menu(self):
         action_entries = [
-            ('about', print),
-            ('preferences', print),
+            ('about', self.handle_about),
+            ('preferences', self.handle_preferences),
             ('quit', self.quit),
         ]
 
@@ -448,6 +442,19 @@ class Application(Gtk.Application):
             simple_action = Gio.SimpleAction.new(action, None)
             simple_action.connect('activate', callback)
             self.add_action(simple_action)
+
+        builder = Gtk.Builder.new_from_resource(
+            '/today/sam/green-recorder/gtk/menus.ui')
+        self._menu = builder.get_object('app-menu')
+        self.props.app_menu = self._menu
+
+    def handle_preferences(self, action, param):
+        win = PrefsWindow()
+        win.show()
+
+    def handle_about(self, action, param):
+        win = about.AboutWindow()
+        win.show()
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
@@ -482,8 +489,8 @@ Gtk.StyleContext.add_provider_for_screen(
     style_provider,
     Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+
 def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = Application()
     app.run(sys.argv)
-    Gtk.main()

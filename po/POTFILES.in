@@ -1,5 +1,6 @@
 # List of source files which contain translatable strings.
 data/AppWindow.ui
+data/AboutWindow.ui
 data/PrefsWindow.ui
 data/app-menu.ui
 
