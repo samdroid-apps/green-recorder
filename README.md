@@ -91,9 +91,12 @@ The program requires the pydbus python3 module, install it first:
 
 The source code is available to download via: [https://github.com/green-project/green-recorder/archive/master.zip](https://github.com/green-project/green-recorder/archive/master.zip). You can simply download it and install the dependencies on your distribution (gir1.2-appindicator3, gawk, python3-gobject, python3-urllib3, x11-utils, ffmpeg, pydbus, pulseaudio, xdg-open (or xdg-utils), python3-configparser, imagemagick). And then run:
 
-    sudo python3 setup.py install
+    meson . build
+    cd build
+    ninja
+    sudo ninja install
 
-Make sure you are running it with Python 3.   Believe it or not, in the 10 or so years of development; Python 3 has advanced considerable compared to Python 2!
+You may have to install meson or ninja.  However, if you just type the commands into your terminal; your shell may prompt you to install the correct packages (thanks PackageKit)!
 
 ## Contact
 
