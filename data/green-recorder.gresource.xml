@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/today/sam/green-recorder">
+    <file alias="gtk/menus.ui" preprocess="xml-stripblanks">app-menu.ui</file>
+    <!-- <file alias="gtk/help-overlay.ui" preprocess="xml-stripblanks">help-overlay.ui</file> -->
+    <!-- <file>application.css</file> -->
+    <file preprocess="xml-stripblanks">AppWindow.ui</file>
+  </gresource>
+</gresources>

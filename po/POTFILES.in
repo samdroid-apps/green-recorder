@@ -1,0 +1,4 @@
+# List of source files which contain translatable strings.
+data/AppWindow.ui
+data/app-menu.ui
+greenrecorder/__init__.py

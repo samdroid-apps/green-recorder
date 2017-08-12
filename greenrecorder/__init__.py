@@ -32,9 +32,14 @@ import typing as T
 from pydbus import SessionBus
 import gi
 
+# This is a dodgy hack
+# AppIndicator3 doesn't seem to work under Wayland, but it works
+# find under xWayland
+os.environ['GDK_BACKEND'] = 'x11'
+
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, Gdk, GLib, AppIndicator3 # noqa
+from gi.repository import Gtk, Gdk, GLib, AppIndicator3, Gio # noqa
 
 
 class Configuration():
@@ -226,7 +231,7 @@ class AppWindow():
 
         # Import the glade file and its widgets.
         builder = Gtk.Builder()
-        builder.add_from_file("/usr/share/green-recorder/ui.glade")
+        builder.add_from_resource('/today/sam/green-recorder/AppWindow.ui')
         self._builder = builder
 
         # Create pointers.
@@ -363,14 +368,6 @@ class AppWindow():
             self._areagrabbutton.set_sensitive(False)
             self._followmousecheck.set_sensitive(False)
             formatchooser.append("webm", "WebM (The Open WebM Format)")
-
-            if 'x11' not in os.environ.get('GDK_BACKEND', ''):
-                send_notification(
-                    ("You didn't run the program using the application icon "
-                     "(desktop file). This will cause the program not to work. "
-                     "Run it using the icon from the menus only. "
-                     "(Need to export GDK_BACKEND=x11 first)"),
-                    6)
         else:
             formatchooser.append(
                 "mkv", _("MKV (Matroska multimedia container format)"))
@@ -603,8 +600,7 @@ Gtk.StyleContext.add_provider_for_screen(
     style_provider,
     Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-# The End of all things.
-if __name__ == "__main__":
+def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = Application()
     app.run(sys.argv)

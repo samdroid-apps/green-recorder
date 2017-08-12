@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+
+from gi.repository import Gio
+import greenrecorder
+
+resource = Gio.resource_load('@RESOURCE_PATH@')
+Gio.Resource._register(resource)  # noqa
+
+print(dir(greenrecorder))
+print(greenrecorder.__path__)
+greenrecorder.main()
