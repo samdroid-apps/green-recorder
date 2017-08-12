@@ -20,11 +20,8 @@
 import os
 import sys
 import signal
-import locale
 import urllib.parse
-import gettext
 import datetime
-import threading
 import subprocess
 import configparser
 import typing as T
@@ -190,23 +187,17 @@ class AppWindow():
         self._folderchooser = builder.get_object("filechooserbutton1")
         self._filenameentry = builder.get_object("entry1")
         self._commandentry = builder.get_object("entry2")
-        preffilename = builder.get_object("entry3")
         self._windowgrabbutton = builder.get_object("button4")
         self._areagrabbutton = builder.get_object("button5")
         self._videocheck = builder.get_object("checkbutton1")
         self._audiocheck = builder.get_object("checkbutton2")
         self._mousecheck = builder.get_object("checkbutton3")
         self._followmousecheck = builder.get_object("checkbutton4")
-        frametext = builder.get_object("label2")
-        delaytext = builder.get_object("label3")
         self._delayvalue = builder.get_object('spinbutton2')
-        commandtext = builder.get_object("label6")
-        audiosourcelabel = builder.get_object("audiosourcelabel")
         self._audiosource = self._builder.get_object("audiosource")
         delayadjustment = builder.get_object("adjustment1")
         framesadjustment = builder.get_object("adjustment2")
         self._playbutton = builder.get_object("playbutton")
-        youcanlabel = builder.get_object("label15")
         self._formatchooser = self._builder.get_object("comboboxtext1")
         self._framesvalue = self._builder.get_object("spinbutton1")
 
