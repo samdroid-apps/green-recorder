@@ -17,6 +17,4 @@ import greenrecorder  # noqa
 resource = Gio.resource_load('@RESOURCE_PATH@')
 Gio.Resource._register(resource)  # noqa
 
-print(dir(greenrecorder))
-print(greenrecorder.__path__)
 greenrecorder.main()

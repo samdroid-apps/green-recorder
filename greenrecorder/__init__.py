@@ -61,11 +61,12 @@ class Configuration():
 
         if os.path.isfile(self._file_path):
             self._cp.read(self._file_path)
-        else:
+
+        if not self._cp.has_section('Options'):
             self._cp.add_section('Options')
             self.save()
 
-    def __setitem__(self, name: str, value: T.Union[str, bool, int]):
+    def __setitem__(self, name: str, value: T.Union[str, bool, float]):
         self._cp.set('Options', name, str(value))
         self.save()
 
@@ -76,12 +77,12 @@ class Configuration():
 
         if isinstance(default, bool):
             return self._cp.getboolean('Options', name)
-        if isinstance(default, int):
-            return self._cp.getint('Options', name)
+        if isinstance(default, (int, float)):
+            return self._cp.getfloat('Options', name)
         return self._cp.get('Options', name)
 
     def save(self):
-        with open(self._file_path, 'wb') as f:
+        with open(self._file_path, 'w') as f:
             self._cp.write(f)
 
 
@@ -126,11 +127,64 @@ def send_notification(text: str, time: int = 5):
                          "Green Recorder", text, [], {}, time * 1000)
 
 
+class PrefsWindow():
+
+    def __init__(self, parent_window):
+        # Import the glade file and its widgets.
+        self._builder = Gtk.Builder()
+        self._builder.add_from_resource('/today/sam/green-recorder/PrefsWindow.ui')
+        self._builder.connect_signals(self)
+
+        self._window = self._builder.get_object('window')
+        self._window.props.attached_to = parent_window
+
+        self._builder.get_object('video').props.state = config['videocheck']
+        self._builder.get_object('mouse').props.state = config['mousecheck']
+        self._builder.get_object('followmouse').props.state = config['followmousecheck']
+        self._builder.get_object('delay').props.value = config['delay']
+        self._builder.get_object('frames').props.value = config['frames']
+        self._builder.get_object('audio').props.state = config['audiocheck']
+        self._builder.get_object('filename').props.text = config['filename']
+        self._builder.get_object('command').props.text = config['command']
+        self._builder.get_object('folder').set_uri(config['folder'])
+
+    def show(self):
+        self._window.show()
+
+    def handle_video_record_switch(self, switch, state):
+        config['videocheck'] = state
+
+    def handle_audio_record_switch(self, switch, state):
+        config['audiocheck'] = state
+
+    def handle_mouse_switch(self, switch, state):
+        config['mousecheck'] = state
+
+    def handle_follow_mouse_switch(self, switch, state):
+        config['followmousecheck'] = state
+
+    def handle_filename_changed(self, entry):
+        config['filename'] = entry.props.text
+
+    def handle_delay_changed(self, button):
+        config['delay'] = button.props.value
+
+    def handle_frames_changed(self, button):
+        config['frames'] = button.props.value
+
+    def handle_command_changed(self, entry):
+        config['command'] = entry.props.text
+
+    def handle_folder_chosen(self, chooser):
+        config['folder'] = chooser.get_uri()
+
+
 class AppWindow():
 
     def __init__(self):
         self._indicator = None
         self._areaaxis = None
+        self._prefs_window = None
 
         # Import the glade file and its widgets.
         builder = Gtk.Builder()
@@ -140,9 +194,7 @@ class AppWindow():
         # Create pointers.
         self._window = builder.get_object("window1")
         self._areachooser = builder.get_object("window2")
-        self._preferenceswindow = builder.get_object("preferenceswindow")
         self._folderchooser = builder.get_object("filechooserbutton1")
-        folderchooser2 = builder.get_object("filechooserbutton2")
         self._filenameentry = builder.get_object("entry1")
         self._commandentry = builder.get_object("entry2")
         preffilename = builder.get_object("entry3")
@@ -156,79 +208,40 @@ class AppWindow():
         delaytext = builder.get_object("label3")
         self._delayvalue = builder.get_object('spinbutton2')
         commandtext = builder.get_object("label6")
-        frameslabel = builder.get_object("frameslabel")
-        delaylabel = builder.get_object("delaylabel")
-        folderlabel = builder.get_object("folderlabel")
-        commandlabel = builder.get_object("commandlabel")
         audiosourcelabel = builder.get_object("audiosourcelabel")
         self._audiosource = self._builder.get_object("audiosource")
         delayadjustment = builder.get_object("adjustment1")
         framesadjustment = builder.get_object("adjustment2")
-        delayprefadjustment = builder.get_object("adjustment3")
-        framesprefadjustment = builder.get_object("adjustment4")
-        commandentry2 = builder.get_object("gtkentry2")
         self._playbutton = builder.get_object("playbutton")
-        prefrecvidlabel = builder.get_object("label10")
-        prefrecaudlabel = builder.get_object("label11")
-        prefrecmouslabel = builder.get_object("label12")
-        preffollowmouselabel = builder.get_object("label13")
-        preffilenamelabel = builder.get_object("label14")
         youcanlabel = builder.get_object("label15")
-        videoswitch = builder.get_object("videoswitch")
-        audioswitch = builder.get_object("audioswitch")
-        mouseswitch = builder.get_object("mouseswitch")
-        followmouseswitch = builder.get_object("followmouseswitch")
         self._formatchooser = self._builder.get_object("comboboxtext1")
         self._framesvalue = self._builder.get_object("spinbutton1")
 
         # Assign the texts to the interface
         self._window.set_title(_("Green Recorder"))
         self._areachooser.set_name(_('AreaChooser'))
-        self._preferenceswindow.set_title(_('Green Recorder Preferences'))
         self._window.connect("delete-event", Gtk.main_quit)
         self._filenameentry.set_placeholder_text(
             _("File Name (Will be overwritten).."))
         self._commandentry.set_placeholder_text(_("Enter your command here.."))
-        commandentry2.set_placeholder_text(_("Enter your command here.."))
-        preffilename.set_placeholder_text(
-            _("File Name (Will be overwritten).."))
         self._videocheck.set_label(_("Record Video"))
         self._audiocheck.set_label(_("Record Audio"))
         self._mousecheck.set_label(_("Show Mouse"))
         self._followmousecheck.set_label(_("Follow Mouse"))
-        self._preferenceswindow.set_icon_name("green-recorder")
         self._windowgrabbutton.set_label(_("Select a Window"))
         self._areagrabbutton.set_label(_("Select an Area"))
         frametext.set_label(_("Frames:"))
         delaytext.set_label(_("Delay:"))
         commandtext.set_label(_("Run Command After Recording:"))
-        frameslabel.set_label(_("Default frames:"))
-        delaylabel.set_label(_("Default delay:"))
-        folderlabel.set_label(_("Default folder:"))
-        commandlabel.set_label(_("Default command:"))
         audiosourcelabel.set_label(_("Audio Input Source:"))
-        prefrecvidlabel.set_label(_("Record Video"))
-        prefrecaudlabel.set_label(_("Record Audio"))
-        prefrecmouslabel.set_label(_("Record Mouse"))
-        preffollowmouselabel.set_label(_("Follow Mouse"))
-        preffilenamelabel.set_label(_("Default filename:"))
         youcanlabel.set_label(_("If you want, you can:"))
 
         # Get defaults from configuration file.
         delayadjustment.set_value(config['delay'])
         framesadjustment.set_value(config['frames'])
-        delayprefadjustment.set_value(config['delay'])
-        framesprefadjustment.set_value(config['frames'])
         FolderPath = config['folder']
         self._folderchooser.set_uri(urllib.parse.unquote(FolderPath))
-        folderchooser2.set_uri(urllib.parse.unquote(FolderPath))
         self._commandentry.set_text(config['command'])
-        commandentry2.set_text(config['command'])
-        videoswitch.set_state(config['videocheck'])
-        audioswitch.set_state(config['audiocheck'])
-        mouseswitch.set_state(config['mousecheck'])
-        followmouseswitch.set_state(config['followmousecheck'])
-        preffilename.set_text(config['filename'])
         self._filenameentry.set_text(config['filename'])
 
         self._videocheck.set_active(config['videocheck'])
@@ -436,10 +449,9 @@ class AppWindow():
         self._areachooser.show()
 
     def handle_preferencesbuttonclicked(self, GtkButton):
-        self._preferenceswindow.show()
-
-    def handle_preferencesclosebutton(self, GtkButton):
-        self._preferenceswindow.hide()
+        if self._prefs_window is None:
+            self._prefs_window = PrefsWindow(self._window)
+        self._prefs_window.show()
 
     def handle_playbuttonclicked(self, GtkButton):
         subprocess.call(["xdg-open", self._mixed_file_output])
@@ -447,33 +459,6 @@ class AppWindow():
     def handle_areasettings(self, GtkButton):
         self._set_area_from_command('xwininfo -name "Area Chooser"')
         send_notification("Your area position has been saved!", 3)
-
-    def handle_frameschanged(self, spin_button):
-        config['frames'] = int(spin_button.get_value())
-
-    def handle_delaychanged(self, spin_button):
-        config['delay'] = int(spin_button.get_value())
-
-    def handle_folderchosen(self, chooser):
-        config['folder'] = urllib.parse.unquote(chooser.get_uri())
-
-    def handle_commandchanged(self, entry):
-        config['command'] = entry.get_text()
-
-    def handle_videoswitchchanged(self, switch, state):
-        config['videocheck'] = state
-
-    def handle_audioswitchchanged(self, switch, state):
-        config['audiocheck'] = state
-
-    def handle_mouseswitchchanged(self, switch, state):
-        config['mousecheck'] = state
-
-    def handle_followmouseswitchchanged(self, switch, state):
-        config['followmousecheck'] = state
-
-    def handle_filenamechanged(self, entry):
-        config['filename'] = entry.get_text()
 
 
 class Application(Gtk.Application):
@@ -488,6 +473,22 @@ class Application(Gtk.Application):
         window = AppWindow()
         window.show()
 
+    def _build_app_menu(self):
+        action_entries = [
+            ('about', print),
+            ('preferences', print),
+            ('quit', self.quit),
+        ]
+
+        for action, callback in action_entries:
+            simple_action = Gio.SimpleAction.new(action, None)
+            simple_action.connect('activate', callback)
+            self.add_action(simple_action)
+
+    def do_startup(self):
+        Gtk.Application.do_startup(self)
+        self._build_app_menu()
+
 
 # Load CSS for Area Chooser.
 style_provider = Gtk.CssProvider()
@@ -495,6 +496,20 @@ css = b'''
 #AreaChooser {
     background-color: rgba(255, 255, 255, 0);
     border: 1px solid red;
+}
+
+.PrefsWindow frame > box > grid {
+    background: white;
+    padding: 12px 18px;
+}
+
+.PrefsWindow__header_label {
+    font-weight: bold;
+    margin-top: 18px;
+    margin-bottom: 6px;
+}
+.PrefsWindow__header_label:first-child {
+    margin-top: 0;
 }
 '''
 style_provider.load_from_data(css)
