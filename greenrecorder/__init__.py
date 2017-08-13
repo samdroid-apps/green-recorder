@@ -32,6 +32,7 @@ from . import preferences
 from .preferences import DEFAULTS
 from . import util
 from . import recorder
+from . import screenrecorder
 
 
 # Define a loop and connect to the session bus. This is for Wayland
@@ -154,7 +155,7 @@ class AppWindow():
         self._recorder = recorder.Recorder(self._config)
         self._create_recorder_indicator()
 
-    def handle_recordclicked(self, GtkButton):
+    def handle_record_clicked(self, GtkButton):
         self.record()
 
     def _set_area_from_command(self, command):
@@ -178,7 +179,11 @@ class AppWindow():
         self._select_entire.props.active = False
         self._select_window.props.active = False
 
-        self._areachooser.show()
+        rec = screenrecorder.get_recorder()
+        rec.select_area(self.handle_select_area_callback)
+
+    def handle_select_area_callback(self, area):
+        self._config['area'] = area
 
     def handle_select_window(self, button: Gtk.ToggleButton):
         if not button.props.active:
@@ -190,10 +195,6 @@ class AppWindow():
 
     def handle_playbuttonclicked(self, GtkButton):
         subprocess.call(["xdg-open", self._recorded_fp])
-
-    def handle_areasettings(self, GtkButton):
-        self._set_area_from_command('xwininfo -name "Area Chooser"')
-        send_notification("Your area position has been saved!", 3)
 
     def handle_folder_chosen(self, chooser):
         self._config['folder'] = chooser.get_uri()

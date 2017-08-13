@@ -8,13 +8,6 @@ from . import preferences
 from . import util
 
 
-DISPLAY_SERVER = os.environ.get("XDG_SESSION_TYPE", "xorg")
-if "wayland" in DISPLAY_SERVER:
-    DISPLAY_SERVER = "gnomewayland"
-else:
-    DISPLAY_SERVER = "xorg"
-
-
 class RecorderException(Exception):
     pass
 
@@ -37,13 +30,7 @@ class Recorder():
 
         if config['video']:
             area = config['area']
-            if "xorg" in DISPLAY_SERVER:
-                self._video_recorder = screenrecorder.XorgRecorder()
-            elif "gnomewayland" in DISPLAY_SERVER:
-                self._video_recorder = screenrecorder.GnomeRecorder()
-            else:
-                raise RecorderException('Display server not supported')
-
+            self._video_recorder = screenrecorder.get_recorder()
             self._video_recorder.start(f'{basename}.video.{extension}', config)
 
         if config['audio'] != 'none':

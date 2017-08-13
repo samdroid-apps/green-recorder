@@ -16,10 +16,14 @@ import os
 import subprocess
 import typing as T
 
-from gi.repository import GLib
+from gi.repository import GLib, Gtk
 from pydbus import SessionBus
 
 from . import preferences
+
+
+SelectAreaCallback = T.Callable[[T.Tuple[float, float, float, float]], None]
+
 
 class Recorder():
     def start(self, desired_output: str, config: preferences.ConfigurationType):
@@ -29,6 +33,9 @@ class Recorder():
         '''
         Stops the recording and returns a path to the video file
         '''
+        raise NotImplementedError()
+
+    def select_area(self, callback: SelectAreaCallback):
         raise NotImplementedError()
 
 
@@ -63,12 +70,34 @@ class XorgRecorder(Recorder):
         self._process.terminate()
         return self._outfile
 
+    def select_area(self, callback: SelectAreaCallback):
+        builder = Gtk.Builder()
+        builder.add_from_resource('/today/sam/green-recorder/XorgAreaChoser.ui')
+        window = builder.get_object('window')
+        accept_button = builder.get_object('accept')
+
+        window.show()
+        accept_button.connect('clicked', self.handle_accept_clicked, callback)
+
+    def _area_from_command(self, command):
+        output = subprocess.check_output(
+            [command + '| grep -e Width -e Height -e Absolute'],
+            shell=True).decode()[:-1]
+
+        return [int(l.split(':')[1]) for l in output.split('\n')]
+
+    def handle_accept_clicked(self, button, callback):
+        callback(self._area_from_command('xwininfo -name "Area Chooser"'))
+        button.get_window().destroy()
+
 
 class GnomeRecorder(Recorder):
 
     def __init__(self):
         self._screencast = SessionBus().get(
             'org.gnome.Shell.Screencast', '/org/gnome/Shell/Screencast')
+        self._screenshot = SessionBus().get(
+            'org.gnome.Shell.Screenshot', '/org/gnome/Shell/Screenshot')
 
     def start(self, desired_output: str, config: preferences.ConfigurationType):
         if config['codec_video'] == 'vp8':
@@ -100,3 +129,21 @@ class GnomeRecorder(Recorder):
     def stop(self) -> str:
         self._screencast.StopScreencast()
         return self._outfile
+
+    def select_area(self, callback: SelectAreaCallback):
+        # TODO: get async DBus working - never block the mainloop
+        res = self._screenshot.SelectArea()
+        callback(res)
+
+
+session = os.environ.get('XDG_SESSION_TYPE', 'xorg')
+if 'wayland' == session:
+    _recorder = GnomeRecorder()
+elif 'xorg' in session:
+    _recorder = XorgRecorder()
+else:
+    raise SystemError(f'No recorder found for session {session}')
+
+
+def get_recorder():
+    return _recorder

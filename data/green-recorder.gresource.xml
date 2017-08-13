@@ -7,5 +7,6 @@
     <file preprocess="xml-stripblanks">AppWindow.ui</file>
     <file preprocess="xml-stripblanks">AboutWindow.ui</file>
     <file preprocess="xml-stripblanks">PrefsWindow.ui</file>
+    <file preprocess="xml-stripblanks">XorgAreaChoser.ui</file>
   </gresource>
 </gresources>

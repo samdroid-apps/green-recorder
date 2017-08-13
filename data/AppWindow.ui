@@ -243,7 +243,6 @@
             <property name="image">down_arrow</property>
             <property name="image_position">right</property>
             <property name="sensitive">False</property>
-            <signal name="clicked" handler="handle_advanced_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -283,7 +282,7 @@
             <style>
               <class name="destructive-action"/>
             </style>
-            <signal name="clicked" handler="handle_advanced_settings" swapped="no"/>
+            <signal name="clicked" handler="handle_record_clicked" swapped="no"/>
           </object>
         </child>
         <child>
@@ -306,34 +305,5 @@
       <widget name="select_area"/>
       <widget name="folder"/>
     </widgets>
-  </object>
-  <object class="GtkWindow" id="window2">
-    <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
-    <property name="window_position">center</property>
-    <property name="icon_name">green-recorder</property>
-    <property name="gravity">static</property>
-    <child type="titlebar">
-      <object class="GtkHeaderBar" id="headerbar2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="title">Area Chooser</property>
-        <property name="has_subtitle">False</property>
-        <property name="show_close_button">True</property>
-        <child>
-          <object class="GtkButton" id="areasettings">
-            <property name="label">gtk-apply</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="relief">none</property>
-            <property name="use_stock">True</property>
-            <property name="always_show_image">True</property>
-            <signal name="clicked" handler="handle_areasettings" swapped="no"/>
-          </object>
-        </child>
-      </object>
-    </child>
   </object>
 </interface>
