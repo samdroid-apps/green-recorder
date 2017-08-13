@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: green-recorder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-12 14:14+1000\n"
+"POT-Creation-Date: 2017-08-13 11:19+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,64 +17,36 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/AppWindow.ui:73
+#: data/AppWindow.ui:75
+msgid "File exists; new video will overwrite"
+msgstr ""
+
+#: data/AppWindow.ui:76
 msgid "File Name (Will be overwritten).."
 msgstr ""
 
-#: data/AppWindow.ui:121
-msgid "If you want, you can:"
+#: data/AppWindow.ui:128
+msgid "Entire Screen"
 msgstr ""
 
-#: data/AppWindow.ui:131
+#: data/AppWindow.ui:143
 msgid "Select a Window"
 msgstr ""
 
-#: data/AppWindow.ui:145
+#: data/AppWindow.ui:157
 msgid "Select an Area"
 msgstr ""
 
-#: data/AppWindow.ui:172
-msgid "Audio Input Source:"
+#: data/AppWindow.ui:235
+msgid "Advanced Settings"
 msgstr ""
 
-#: data/AppWindow.ui:212 data/PrefsWindow.ui:66
-msgid "Record Video"
+#: data/AppWindow.ui:282
+msgid "Record"
 msgstr ""
 
-#: data/AppWindow.ui:225 data/PrefsWindow.ui:407
-msgid "Record Audio"
-msgstr ""
-
-#: data/AppWindow.ui:238
-msgid "Show Mouse"
-msgstr ""
-
-#: data/AppWindow.ui:251 data/PrefsWindow.ui:180
-msgid "Follow Mouse"
-msgstr ""
-
-#: data/AppWindow.ui:278
-msgid "Frames:"
-msgstr ""
-
-#: data/AppWindow.ui:290
-msgid "30"
-msgstr ""
-
-#: data/AppWindow.ui:303
-msgid "Delay:"
-msgstr ""
-
-#: data/AppWindow.ui:315
-msgid "0"
-msgstr ""
-
-#: data/AppWindow.ui:346
-msgid "Run Command After Recording:"
-msgstr ""
-
-#: data/AppWindow.ui:358
-msgid "Enter your command here.."
+#: data/AppWindow.ui:294
+msgid "Play"
 msgstr ""
 
 #: data/AboutWindow.ui:10
@@ -83,68 +55,100 @@ msgid ""
 "© 2017 Sam Parkinson"
 msgstr ""
 
-#: data/PrefsWindow.ui:18 data/app-menu.ui:6
-msgid "Preferences"
-msgstr ""
-
-#: data/PrefsWindow.ui:34
-msgid "Video"
-msgstr ""
-
-#: data/PrefsWindow.ui:114
-msgid "Record Mouse"
-msgstr ""
-
-#: data/PrefsWindow.ui:140
-msgid "Include the mouse cursor in the video file"
-msgstr ""
-
-#: data/PrefsWindow.ui:205
-msgid "Center the video area on the mouse cursor"
-msgstr ""
-
-#: data/PrefsWindow.ui:245
-msgid "Default Delay"
-msgstr ""
-
-#: data/PrefsWindow.ui:257
-msgid "Delay between clicking record and the recording starting, in seconds"
-msgstr ""
-
-#: data/PrefsWindow.ui:312
-msgid "Default Frames"
-msgstr ""
-
-#: data/PrefsWindow.ui:324
-msgid "FPS of the recording"
-msgstr ""
-
-#: data/PrefsWindow.ui:375
-msgid "Audio"
-msgstr ""
-
-#: data/PrefsWindow.ui:450
+#: data/PrefsWindow.ui:25
 msgid "Saving"
 msgstr ""
 
-#: data/PrefsWindow.ui:482
-msgid "Default folder"
+#: data/PrefsWindow.ui:57
+msgid "Folder"
 msgstr ""
 
-#: data/PrefsWindow.ui:532
-msgid "Default filename"
+#: data/PrefsWindow.ui:110
+msgid "Filename"
 msgstr ""
 
-#: data/PrefsWindow.ui:544
+#: data/PrefsWindow.ui:122
 msgid "Leave blank to use time"
 msgstr ""
 
-#: data/PrefsWindow.ui:598
-msgid "Default command"
+#: data/PrefsWindow.ui:179
+msgid "Format"
 msgstr ""
 
-#: data/PrefsWindow.ui:610
+#: data/PrefsWindow.ui:191
+msgid "Media container format"
+msgstr ""
+
+#: data/PrefsWindow.ui:248
+msgid "Command"
+msgstr ""
+
+#: data/PrefsWindow.ui:260
 msgid "Run a command after recording"
+msgstr ""
+
+#: data/PrefsWindow.ui:312
+msgid "Video"
+msgstr ""
+
+#: data/PrefsWindow.ui:344
+msgid "Record Video"
+msgstr ""
+
+#: data/PrefsWindow.ui:395 data/PrefsWindow.ui:820
+msgid "Codec"
+msgstr ""
+
+#: data/PrefsWindow.ui:407
+msgid "Video codec to use"
+msgstr ""
+
+#: data/PrefsWindow.ui:463
+msgid "Record Mouse"
+msgstr ""
+
+#: data/PrefsWindow.ui:489
+msgid "Include the mouse cursor in the video file"
+msgstr ""
+
+#: data/PrefsWindow.ui:532
+msgid "Follow Mouse"
+msgstr ""
+
+#: data/PrefsWindow.ui:558
+msgid "Center the video area on the mouse cursor"
+msgstr ""
+
+#: data/PrefsWindow.ui:601
+msgid "Delay"
+msgstr ""
+
+#: data/PrefsWindow.ui:613
+msgid "Between clicking record and the recording starting, in seconds"
+msgstr ""
+
+#: data/PrefsWindow.ui:671
+msgid "Frames"
+msgstr ""
+
+#: data/PrefsWindow.ui:683
+msgid "FPS of the recording"
+msgstr ""
+
+#: data/PrefsWindow.ui:737
+msgid "Audio"
+msgstr ""
+
+#: data/PrefsWindow.ui:769
+msgid "Record Audio"
+msgstr ""
+
+#: data/PrefsWindow.ui:832
+msgid "Audio codec to use"
+msgstr ""
+
+#: data/app-menu.ui:6
+msgid "Preferences"
 msgstr ""
 
 #: data/app-menu.ui:11
@@ -155,39 +159,50 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#. Audio input sources
-#: greenrecorder/__init__.py:232
-msgid "Default PulseAudio Input Source"
+#: greenrecorder/__init__.py:93
+msgid "No Audio"
 msgstr ""
 
-#: greenrecorder/__init__.py:256
-msgid "MKV (Matroska multimedia container format)"
+#: greenrecorder/__init__.py:94
+msgid "Default Audio Input"
 msgstr ""
 
-#: greenrecorder/__init__.py:257
-msgid "AVI (Audio Video Interleaved)"
-msgstr ""
-
-#: greenrecorder/__init__.py:258
-msgid "MP4 (MPEG-4 Part 14)"
-msgstr ""
-
-#: greenrecorder/__init__.py:259
-msgid "WMV (Windows Media Video)"
-msgstr ""
-
-#: greenrecorder/__init__.py:260
-msgid "GIF (Graphics Interchange Format)"
-msgstr ""
-
-#: greenrecorder/__init__.py:261
-msgid "NUT (NUT Recording Format)"
-msgstr ""
-
-#: greenrecorder/__init__.py:411
-msgid "Area Chooser"
-msgstr ""
-
-#: greenrecorder/__init__.py:427
+#: greenrecorder/__init__.py:222
 msgid "Green Recorder"
+msgstr ""
+
+#: greenrecorder/preferences.py:78
+msgid "WebM"
+msgstr ""
+
+#: greenrecorder/preferences.py:79
+msgid "MKV (Matroska)"
+msgstr ""
+
+#: greenrecorder/preferences.py:94
+msgid "Opus"
+msgstr ""
+
+#: greenrecorder/preferences.py:95
+msgid "Ogg Vorbis"
+msgstr ""
+
+#: greenrecorder/preferences.py:96
+msgid "MP3"
+msgstr ""
+
+#: greenrecorder/preferences.py:98
+msgid "VP8"
+msgstr ""
+
+#: greenrecorder/preferences.py:99
+msgid "VP9"
+msgstr ""
+
+#: greenrecorder/preferences.py:100
+msgid "Ogg Theora"
+msgstr ""
+
+#: greenrecorder/preferences.py:218
+msgid "Change Default Settings"
 msgstr ""

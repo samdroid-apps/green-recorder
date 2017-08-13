@@ -6,3 +6,5 @@ data/app-menu.ui
 
 greenrecorder/__init__.py
 greenrecorder/screenrecorder.py
+greenrecorder/recorder.py
+greenrecorder/preferences.py

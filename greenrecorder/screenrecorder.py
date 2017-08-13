@@ -19,12 +19,10 @@ import typing as T
 from gi.repository import GLib
 from pydbus import SessionBus
 
-#                  X,     Y,     Width, Height
-AreaType = T.Tuple[float, float, float, float]
-
+from . import preferences
 
 class Recorder():
-    def start(self, area: AreaType, desired_output: str, **kwargs):
+    def start(self, desired_output: str, config: preferences.ConfigurationType):
         raise NotImplementedError()
 
     def stop(self) -> str:
@@ -35,27 +33,27 @@ class Recorder():
 
 
 class XorgRecorder(Recorder):
-    def start(self, area: AreaType, desired_output: str,
-              follow_mouse=False, mouse=False, frame_rate=30, **kwargs):
-        if self._areaaxis is not None:
-            x, y, w, h = self._areaaxis
+    def start(self, desired_output: str, config: preferences.ConfigurationType):
+        if config['area'] is not None:
+            x, y, w, h = config['area']
             size = '{}x{}'.format(w, h)
             display = '{}+{},{}'.format(os.environ['DISPLAY'], x, y)
 
         command = ["ffmpeg", "-video_size", size]
 
-        if mouse:
+        if config['record_mouse']:
             command.append("-draw_mouse")
             command.append("1")
 
-        if follow_mouse:
+        if config['follow_mouse']:
             command.append("-follow_mouse")
             command.append("centered")
 
         command.extend([
-            "-framerate", frame_rate,
+            "-framerate", config['frame_rate'],
             "-f", "x11grab", "-i", display,
             "-q", 1, desired_output,
+            "-c:v", config['codec_video'],
             "-y"])
 
         self._process = subprocess.Popen(command)
@@ -72,9 +70,8 @@ class GnomeRecorder(Recorder):
         self._screencast = SessionBus().get(
             'org.gnome.Shell.Screencast', '/org/gnome/Shell/Screencast')
 
-    def start(self, area: AreaType, desired_output: str,
-              format=None, mouse=False, frame_rate=30, **kwargs):
-        if format == 'webm':
+    def start(self, desired_output: str, config: preferences.ConfigurationType):
+        if config['codec_video'] == 'vp8':
             pipeline = '''
                 vp8enc min_quantizer=10
                         max_quantizer=50
@@ -88,13 +85,13 @@ class GnomeRecorder(Recorder):
             assert False
 
         options = {
-            'framerate': GLib.Variant('i', frame_rate),
-            'draw-cursor': GLib.Variant('b', mouse),
+            'framerate': GLib.Variant('i', config['frame_rate']),
+            'draw-cursor': GLib.Variant('b', config['record_mouse']),
             'pipeline': GLib.Variant('s', pipeline)}
-        if area is None:
+        if config['area'] is None:
             self._screencast.Screencast(desired_output, options)
         else:
-            x, y, w, h = area
+            x, y, w, h = config['area']
             self._screencast.ScreencastArea(
                 x, y, w, h,
                 desired_output, options)
